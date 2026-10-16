@@ -45,10 +45,10 @@ public class VideojuegoJdbc {
 			throw new RuntimeException("Error al insertar: " + e.getMessage());
 		} finally {
 			try {
-				if(con != null) {
+				if (con != null) {
 					con.close();
 				}
-				if(ps != null) {
+				if (ps != null) {
 					con.close();
 				}
 			} catch (SQLException e) {
@@ -78,13 +78,12 @@ public class VideojuegoJdbc {
 
 				videoJuegos.add(vj);
 			}
-
 		} catch (Exception e) {
 			log.error("Error al listar", e);
 			throw new RuntimeException("Error al listar: " + e.getMessage());
 		} finally {
 			try {
-				if(con != null) {
+				if (con != null) {
 					con.close();
 				}
 			} catch (SQLException e) {
@@ -117,11 +116,98 @@ public class VideojuegoJdbc {
 				videoJuego = new Videojuego(rs.getString("codigo"), rs.getString("nombre"), rs.getString("plataforma"),
 						rs.getDouble("precio"), rs.getBoolean("disponible"), rs.getString("genero"));
 			}
-			
+
 		} catch (Exception e) {
 			log.error("Error al buscar: ", e);
 			throw new RuntimeException("Error al buscar: " + e.getMessage());
 		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (ps != null) {
+					con.close();
+				}
+				if (rs != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return videoJuego;
+	}
+
+	public static Videojuego actualizar(String codigo, String nuevoNombre, String nuevaPlataforma, double nuevoPrecio,
+			boolean nuevoDisponible, String nuevoGenero) {
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		String sql = """
+				UPDATE videojuegos SET nombre = ?, plataforma = ?, precio = ?, disponible = ?, genero = ?
+				WHERE codigo = ?;
+				""";
+		ResultSet rs = null;
+		Videojuego videoJuego = null;
+
+		try {
+			con = Conexion.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, nuevoNombre);
+			ps.setString(2, nuevaPlataforma);
+			ps.setDouble(3, nuevoPrecio);
+			ps.setBoolean(4, nuevoDisponible);
+			ps.setString(5, nuevoGenero);
+			ps.setString(6, codigo);
+
+			int fila = ps.executeUpdate();
+			videoJuego = new Videojuego(codigo, nuevoNombre, nuevaPlataforma, nuevoPrecio, nuevoDisponible,
+					nuevoGenero);
+			log.info("Filas actualizadas: " + fila);
+		} catch (Exception e) {
+			log.error("Error al actualizar: ", e);
+			throw new RuntimeException("Error al actualizar: " + e.getMessage());
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (ps != null) {
+					con.close();
+				}
+				if (rs != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return videoJuego;
+	}
+
+	public static boolean eliminar(String codigo) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		String sql = """
+				DELETE FROM videojuegos WHERE codigo = ?;
+				""";
+		
+		ResultSet rs = null;
+		
+		try {
+			con = Conexion.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, codigo);
+			
+			int filas = ps.executeUpdate();
+			return true;
+			
+		}catch(Exception e) {
+			log.error("Filas eliminadas: ", e);
+			return false;
+		}finally {
 			try {
 				if(con != null) {
 					con.close();
@@ -132,12 +218,11 @@ public class VideojuegoJdbc {
 				if(rs != null) {
 					con.close();
 				}
-			}catch(Exception e) {
+			}catch(SQLException e){
 				e.printStackTrace();
 			}
-			
 		}
-		return videoJuego;
+		
 	}
 
 }
