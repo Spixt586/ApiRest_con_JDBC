@@ -23,6 +23,7 @@ public class VideojuegoJdbc {
 		Videojuego vJuego = null;
 
 		try {
+			
 			con = Conexion.getConnection();
 			String sql = """
 					INSERT INTO videojuegos(codigo,nombre,plataforma,precio,disponible,genero) VALUES (?,?,?,?,?,?);
@@ -126,10 +127,10 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 				if (ps != null) {
-					con.close();
+					ps.close();
 				}
 				if (rs != null) {
-					con.close();
+					rs.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -174,10 +175,10 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 				if (ps != null) {
-					con.close();
+					ps.close();
 				}
 				if (rs != null) {
-					con.close();
+					rs.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -213,10 +214,10 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 				if(ps != null) {
-					con.close();
+					ps.close();
 				}
 				if(rs != null) {
-					con.close();
+					rs.close();
 				}
 			}catch(SQLException e){
 				e.printStackTrace();
