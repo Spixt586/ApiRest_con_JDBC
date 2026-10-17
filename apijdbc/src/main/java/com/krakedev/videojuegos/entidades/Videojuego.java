@@ -46,7 +46,7 @@ public class Videojuego {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
-	public boolean getDisponible() {
+	public boolean isDisponible() {
 		return disponible;
 	}
 	public void setDisponible(boolean disponible) {

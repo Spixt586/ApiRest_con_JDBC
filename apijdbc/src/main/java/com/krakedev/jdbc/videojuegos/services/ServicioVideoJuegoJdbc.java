@@ -12,7 +12,7 @@ public class ServicioVideoJuegoJdbc {
 
 	public Videojuego crear(Videojuego videoJuego) {
 		return VideojuegoJdbc.insertar(videoJuego.getCodigo(), videoJuego.getNombre(), videoJuego.getPlataforma(),
-				videoJuego.getPrecio(), videoJuego.getDisponible(), videoJuego.getGenero());
+				videoJuego.getPrecio(), videoJuego.isDisponible(), videoJuego.getGenero());
 	}
 	
 	public List<Videojuego> listar(){
@@ -24,7 +24,7 @@ public class ServicioVideoJuegoJdbc {
 	}
 	
 	public Videojuego actualizar(String codigo, Videojuego juegoActualizado) {
-		return VideojuegoJdbc.actualizar(codigo, juegoActualizado.getNombre(), juegoActualizado.getPlataforma(), juegoActualizado.getPrecio(), juegoActualizado.getDisponible(), juegoActualizado.getGenero());
+		return VideojuegoJdbc.actualizar(codigo, juegoActualizado.getNombre(), juegoActualizado.getPlataforma(), juegoActualizado.getPrecio(), juegoActualizado.isDisponible(), juegoActualizado.getGenero());
 	}
 	
 	public boolean eliminar(String codigo) {
