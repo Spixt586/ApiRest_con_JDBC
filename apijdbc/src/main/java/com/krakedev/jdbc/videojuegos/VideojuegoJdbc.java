@@ -60,16 +60,18 @@ public class VideojuegoJdbc {
 	}
 
 	public static List<Videojuego> listar() {
-		List<Videojuego> videoJuegos = new ArrayList();
+		List<Videojuego> videoJuegos = new ArrayList<>();
 		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			con = Conexion.getConnection();
 
 			String sql = """
 					SELECT * FROM Videojuegos;
 					""";
-			PreparedStatement ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Videojuego vj = new Videojuego(rs.getString("codigo"), rs.getString("nombre"),
@@ -83,6 +85,12 @@ public class VideojuegoJdbc {
 			throw new RuntimeException("Error al listar: " + e.getMessage(), e);
 		} finally {
 			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(ps != null) {
+					ps.close();
+				}
 				if (con != null) {
 					con.close();
 				}
