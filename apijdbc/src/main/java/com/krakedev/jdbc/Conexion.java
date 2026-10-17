@@ -20,7 +20,7 @@ public class Conexion {
             return con;
         } catch (SQLException e) {
             log.error("La conexión a la base de datos ha fallado: " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error al conectar a la base de datos" + e.getMessage(),e);
         }
     }
 }
