@@ -42,19 +42,18 @@ public class VideojuegoJdbc {
 			log.info("Filas insertadas: " + filas);
 
 		} catch (SQLException e) {
-			log.error("Error al insertar" + e);
-			throw new RuntimeException("Error al insertar: " + e.getMessage());
+			log.error("Error al insertar", e);
+			throw new RuntimeException("Error al insertar: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (ps != null) {
-					con.close();
+					ps.close();
 				}
 				if (con != null) {
 					con.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Error al cerrar los recursos", e);
 			}
 		}
 		return vJuego;
@@ -81,15 +80,14 @@ public class VideojuegoJdbc {
 			}
 		} catch (Exception e) {
 			log.error("Error al listar", e);
-			throw new RuntimeException("Error al listar: " + e.getMessage());
+			throw new RuntimeException("Error al listar: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (con != null) {
 					con.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Error al cerrar los recursos", e);
 			}
 		}
 		return videoJuegos;
@@ -120,7 +118,7 @@ public class VideojuegoJdbc {
 
 		} catch (Exception e) {
 			log.error("Error al buscar: ", e);
-			throw new RuntimeException("Error al buscar: " + e.getMessage());
+			throw new RuntimeException("Error al buscar: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (rs != null) {
@@ -134,7 +132,7 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error al cerrar los recursos", e);
 			}
 
 		}
@@ -169,7 +167,7 @@ public class VideojuegoJdbc {
 			log.info("Filas actualizadas: " + fila);
 		} catch (Exception e) {
 			log.error("Error al actualizar: ", e);
-			throw new RuntimeException("Error al actualizar: " + e.getMessage());
+			throw new RuntimeException("Error al actualizar: " + e.getMessage(), e);
 		} finally {
 			try {
 				if (rs != null) {
@@ -182,7 +180,7 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error al cerrar los recursos", e);
 			}
 		}
 		return videoJuego;
@@ -204,10 +202,11 @@ public class VideojuegoJdbc {
 			ps.setString(1, codigo);
 
 			int filas = ps.executeUpdate();
-			return true;
+			log.info("Filas eliminadas: " + filas);
+			return filas > 0;
 
 		} catch (Exception e) {
-			log.error("Filas eliminadas: ", e);
+			log.error("Error al eliminar: ", e);
 			return false;
 		} finally {
 			try {
@@ -221,7 +220,7 @@ public class VideojuegoJdbc {
 					con.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error al cerrar los recursos", e);
 			}
 		}
 
