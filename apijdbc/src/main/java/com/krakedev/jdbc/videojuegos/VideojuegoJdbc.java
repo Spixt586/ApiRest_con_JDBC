@@ -170,9 +170,14 @@ public class VideojuegoJdbc {
 			ps.setString(6, codigo);
 
 			int fila = ps.executeUpdate();
-			videoJuego = new Videojuego(codigo, nuevoNombre, nuevaPlataforma, nuevoPrecio, nuevoDisponible,
-					nuevoGenero);
-			log.info("Filas actualizadas: " + fila);
+			if(fila > 0) {
+				videoJuego = new Videojuego(codigo, nuevoNombre, nuevaPlataforma, nuevoPrecio, nuevoDisponible,
+						nuevoGenero);
+				log.info("Filas actualizadas: " + fila);
+			}else {
+				log.warn("No se ha actualisado ningún juego, el código no existe" + codigo);
+			}
+			
 		} catch (Exception e) {
 			log.error("Error al actualizar: ", e);
 			throw new RuntimeException("Error al actualizar: " + e.getMessage(), e);
