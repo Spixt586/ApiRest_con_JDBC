@@ -23,7 +23,7 @@ public class VideojuegoJdbc {
 		Videojuego vJuego = null;
 
 		try {
-			
+
 			con = Conexion.getConnection();
 			String sql = """
 					INSERT INTO videojuegos(codigo,nombre,plataforma,precio,disponible,genero) VALUES (?,?,?,?,?,?);
@@ -46,10 +46,10 @@ public class VideojuegoJdbc {
 			throw new RuntimeException("Error al insertar: " + e.getMessage());
 		} finally {
 			try {
-				if (con != null) {
+				if (ps != null) {
 					con.close();
 				}
-				if (ps != null) {
+				if (con != null) {
 					con.close();
 				}
 			} catch (SQLException e) {
@@ -123,14 +123,15 @@ public class VideojuegoJdbc {
 			throw new RuntimeException("Error al buscar: " + e.getMessage());
 		} finally {
 			try {
-				if (con != null) {
-					con.close();
+				if (rs != null) {
+					rs.close();
 				}
 				if (ps != null) {
 					ps.close();
 				}
-				if (rs != null) {
-					rs.close();
+
+				if (con != null) {
+					con.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -171,14 +172,14 @@ public class VideojuegoJdbc {
 			throw new RuntimeException("Error al actualizar: " + e.getMessage());
 		} finally {
 			try {
-				if (con != null) {
-					con.close();
+				if (rs != null) {
+					rs.close();
 				}
 				if (ps != null) {
 					ps.close();
 				}
-				if (rs != null) {
-					rs.close();
+				if (con != null) {
+					con.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -190,40 +191,40 @@ public class VideojuegoJdbc {
 	public static boolean eliminar(String codigo) {
 		Connection con = null;
 		PreparedStatement ps = null;
-		
+
 		String sql = """
 				DELETE FROM videojuegos WHERE codigo = ?;
 				""";
-		
+
 		ResultSet rs = null;
-		
+
 		try {
 			con = Conexion.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setString(1, codigo);
-			
+
 			int filas = ps.executeUpdate();
 			return true;
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			log.error("Filas eliminadas: ", e);
 			return false;
-		}finally {
+		} finally {
 			try {
-				if(con != null) {
-					con.close();
-				}
-				if(ps != null) {
-					ps.close();
-				}
-				if(rs != null) {
+				if (rs != null) {
 					rs.close();
 				}
-			}catch(SQLException e){
+				if (ps != null) {
+					ps.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 }
